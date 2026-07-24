@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export default function Home() {
@@ -33,6 +34,13 @@ export default function Home() {
             </a>{" "}
             center.
           </p>
+          {
+            <>
+              <Button>
+                12e
+              </Button>
+            </>
+          }
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
