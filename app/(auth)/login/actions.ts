@@ -1,28 +1,27 @@
-'use server'
+'use server';
 
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
-export async function login (formData: FormData) {
-    const email = formData.get('email');
-    const password = formData.get('password');
+export async function login(formData: FormData) {
+  const email = formData.get('email');
+  const password = formData.get('password');
 
-    if (typeof email !== 'string' || typeof password !== 'string') {
-        redirect('/login?error=missing_fields')
-    }
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    redirect('/login?error=missing_fields');
+  }
 
-    const supabase = await createClient();
-  
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    })
+  const supabase = await createClient();
 
-    if (error) {    
-        console.error('Ошибка входа:', error.message)
-        redirect('/login?error=invalid_credentials')
-    }
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-    redirect('/')
+  if (error) {
+    console.error('Ошибка входа:', error.message);
+    redirect('/login?error=invalid_credentials');
+  }
 
+  redirect('/');
 }
