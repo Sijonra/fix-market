@@ -8,8 +8,7 @@ export async function login (formData: FormData) {
     const password = formData.get('password');
 
     if (typeof email !== 'string' || typeof password !== 'string') {
-        const safeMessage = 'Заполните поля корректно'
-        redirect('/login?error=' + encodeURIComponent(safeMessage))
+        redirect('/login?error=missing_fields')
     }
 
     const supabase = await createClient();
@@ -21,9 +20,7 @@ export async function login (formData: FormData) {
 
     if (error) {    
         console.error('Ошибка входа:', error.message)
-
-        const safeMessage = 'Неверный email или пароль'
-        redirect('/login?error=' + encodeURIComponent(safeMessage))
+        redirect('/login?error=invalid_credentials')
     }
 
     redirect('/')
