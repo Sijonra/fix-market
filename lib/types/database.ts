@@ -173,7 +173,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_my_role: { Args: never; Returns: Database["public"]["Enums"]["role"] }
     }
     Enums: {
       product_unit: "pcs" | "kg" | "pack" | "m" | "l"
