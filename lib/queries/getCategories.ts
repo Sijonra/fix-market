@@ -5,7 +5,5 @@ export async function getCategories() {
 
   const { data, error } = await supabase.from('categories').select('*');
 
-  console.log(data);
-
   return { data, error };
 }
