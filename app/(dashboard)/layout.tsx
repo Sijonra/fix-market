@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { getCurrentProfileData } from '@/lib/queries/getCurrentProfileData';
 import { logout } from '@/lib/actions/logout';
+import Link from 'next/link';
 
 interface ILayout {
   children: React.ReactNode;
@@ -12,6 +13,9 @@ export default async function Layout({ children }: ILayout) {
   return (
     <div>
       <header>
+        <nav>
+          <Link href="/categories">Категории</Link>
+        </nav>
         <div>{full_name}</div>
         <div>Роль: {role}</div>
         <form action={logout}>
