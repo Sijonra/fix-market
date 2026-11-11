@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -7,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getCategories } from '@/lib/queries/getCategories';
+import Link from 'next/link';
 
 export default async function CategoriesPage() {
   const { data: categories, error: categoriesError } = await getCategories();
@@ -34,6 +36,9 @@ export default async function CategoriesPage() {
 
   return (
     <div>
+      <Button>
+        <Link href={'/categories/new'}>Добавить Новую Категорию</Link>
+      </Button>
       <Table>
         <TableHeader>
           <TableRow>
