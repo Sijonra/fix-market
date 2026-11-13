@@ -37,7 +37,7 @@ export default async function CategoriesPage() {
   return (
     <div>
       <Button>
-        <Link href={'/categories/new'}>Добавить Новую Категорию</Link>
+        <Link href={'/categories/new'}>Добавить новую категорию</Link>
       </Button>
       <Table>
         <TableHeader>

@@ -32,7 +32,7 @@ export default async function NewCategoryPage() {
   ];
 
   return (
-    <main className="w-full max-w-5xl px-4 py-8 sm:px-6">
+    <div className="w-full max-w-5xl px-4 py-8 sm:px-6">
       <h1 className="mb-8 text-3xl font-bold tracking-tight sm:text-4xl">
         Новая категория
       </h1>
@@ -51,16 +51,19 @@ export default async function NewCategoryPage() {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="parent-category" className="text-base sm:text-lg">
+            <Label htmlFor="parentId" className="text-base sm:text-lg">
               Родительская категория
             </Label>
             <Select name="parentId" items={selectOptions}>
-              <SelectTrigger className="h-12 text-base sm:text-lg">
+              <SelectTrigger
+                id="parentId"
+                className="h-12 text-base sm:text-lg"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Fruits</SelectLabel>
+                  <SelectLabel>Родительская категория</SelectLabel>
                   {selectOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
@@ -74,12 +77,15 @@ export default async function NewCategoryPage() {
             <Button type="submit" className="h-12 px-8">
               Сохранить
             </Button>
-            <Button variant="outline" className="h-12 px-8">
-              <Link href="/categories">Отмена</Link>
-            </Button>
+            <Button
+              render={<Link href="/categories">Отмена</Link>}
+              nativeButton={false}
+              variant="outline"
+              type="reset"
+            ></Button>
           </div>
         </form>
       </div>
-    </main>
+    </div>
   );
 }

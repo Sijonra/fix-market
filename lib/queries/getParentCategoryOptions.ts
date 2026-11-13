@@ -14,7 +14,7 @@ export async function getParentCategoryOptions() {
     .order('name', { ascending: true });
 
   if (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return { data, error };
