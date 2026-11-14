@@ -9,6 +9,8 @@ export const ERROR_MESSAGES = {
     'Название категории должно содержать от 1 до 50 символов.',
   invalid_parent: 'Выбрана некорректная родительская категория.',
   database_error: 'Не удалось сохранить данные. Попробуйте позже.',
+  duplicate_category:
+    'Категория с таким названием уже существует в этом разделе.',
 } as const;
 
 export type TErrorCode = keyof typeof ERROR_MESSAGES;

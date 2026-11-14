@@ -1,6 +1,9 @@
 import { redirect } from 'next/navigation';
-import { TErrorCode } from '../errors';
+import type { TErrorCode } from '../errors';
 
-export const redirectToError = (path: string, errorCode: TErrorCode) => [
-  redirect(`${path}?error=${errorCode}`),
-];
+export const redirectToError: (path: string, errorCode: TErrorCode) => never = (
+  path,
+  errorCode
+) => {
+  redirect(`${path}?error=${errorCode}`);
+};

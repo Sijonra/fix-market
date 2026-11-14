@@ -14,8 +14,18 @@ import {
 } from '@/components/ui/select';
 import { getParentCategoryOptions } from '@/lib/queries/getParentCategoryOptions';
 import { createCategory } from '@/lib/actions/createCategory';
+import { getErrorMessage } from '@/lib/errors';
 
-export default async function NewCategoryPage() {
+interface INewCategoryPage {
+  searchParams: Promise<{ error?: string }>;
+}
+
+export default async function NewCategoryPage({
+  searchParams,
+}: INewCategoryPage) {
+  const { error: errorCode } = await searchParams;
+  const errorMessage = getErrorMessage(errorCode);
+
   const { data: categories, error: categoriesError } =
     await getParentCategoryOptions();
 
@@ -39,6 +49,9 @@ export default async function NewCategoryPage() {
       <div className="rounded-xl border bg-card p-5 sm:p-8">
         <form action={createCategory} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
+            {errorMessage && (
+              <p className="text-red-500 text-sm">{errorMessage}</p>
+            )}
             <Label htmlFor="name" className="text-base sm:text-lg">
               Название
             </Label>
@@ -47,6 +60,7 @@ export default async function NewCategoryPage() {
               name="name"
               placeholder="Например, Смесители"
               className="h-12 text-base sm:text-lg"
+              maxLength={50}
               required
             />
           </div>
@@ -78,11 +92,13 @@ export default async function NewCategoryPage() {
               Сохранить
             </Button>
             <Button
-              render={<Link href="/categories">Отмена</Link>}
+              render={<Link href="/categories"></Link>}
               nativeButton={false}
               variant="outline"
-              type="reset"
-            ></Button>
+              type="button"
+            >
+              Отмена
+            </Button>
           </div>
         </form>
       </div>

@@ -17,7 +17,7 @@ export async function getCategories() {
     .order('name', { ascending: true });
 
   if (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return { data, error };

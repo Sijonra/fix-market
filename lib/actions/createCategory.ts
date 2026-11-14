@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { redirectToError } from '@/lib/helpers/redirectToError';
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -11,27 +12,20 @@ export async function createCategory(formData: FormData) {
   const nameRaw = formData.get('name');
   const parentIdRaw = formData.get('parentId');
 
-  console.log('nameRaw: ', nameRaw);
-  console.log('parentIdRaw: ', parentIdRaw);
-
   if (typeof nameRaw !== 'string') {
-    redirect('/categories/new?error=invalid_form');
+    redirectToError('/categories/new', 'invalid_form');
   }
 
   const name = nameRaw.trim();
   if (name.length === 0 || name.length > 50) {
-    redirect('/categories/new?error=invalid_name_length');
+    redirectToError('/categories/new', 'invalid_name_length');
   }
 
   let parentId: string | null = null;
 
-  if (
-    typeof parentIdRaw === 'string' &&
-    parentIdRaw !== '' &&
-    parentIdRaw !== 'none'
-  ) {
+  if (typeof parentIdRaw === 'string' && parentIdRaw !== '') {
     if (!UUID_REGEX.test(parentIdRaw)) {
-      redirect('/categories/new?error=invalid_parent');
+      redirectToError('/categories/new', 'invalid_parent');
     }
     parentId = parentIdRaw;
   }
@@ -45,7 +39,16 @@ export async function createCategory(formData: FormData) {
 
   if (error) {
     console.error('Ошибка создания категории в БД:', error.message);
-    redirect('/categories/new?error=database_error');
+
+    if (error.code === '23505') {
+      redirectToError('/categories/new', 'duplicate_category');
+    }
+
+    if (error.code === '23503') {
+      redirectToError('/categories/new', 'invalid_parent');
+    }
+
+    redirectToError('/categories/new', 'database_error');
   }
 
   revalidatePath('/categories');
