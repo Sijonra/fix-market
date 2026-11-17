@@ -1,17 +1,18 @@
 import { createClient } from '@/lib/supabase/server';
 
-export async function getParentCategoryOptions() {
+export async function getParentCategoryOptions(excludeId?: string) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('categories')
-    .select(
-      `
-      id,
-      name
-    `
-    )
+    .select('id, name')
     .order('name', { ascending: true });
+
+  if (excludeId) {
+    query = query.neq('id', excludeId);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);

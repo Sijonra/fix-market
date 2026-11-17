@@ -4,9 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { redirectToError } from '@/lib/helpers/redirectToError';
-
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { UUID_REGEX } from '../helpers/regex';
 
 export async function createCategory(formData: FormData) {
   const nameRaw = formData.get('name');
