@@ -4,6 +4,7 @@ import { getParentCategoryOptions } from '@/lib/queries/getParentCategoryOptions
 import { notFound } from 'next/navigation';
 import { getErrorMessage } from '@/lib/errors';
 import CategoryForm from '@/app/(dashboard)/categories/CategoryForm';
+import { updateCategory } from '@/lib/actions/updateCategory';
 
 interface IEditCategoriesPage {
   params: Promise<{ id: string }>;
@@ -43,9 +44,7 @@ export default async function EditCategoryPage({
 
   const errorMessage = getErrorMessage(errorCode);
 
-  const updateCategoryWithId = async () => {
-    'use server';
-  };
+  const updateCategoryWithId = updateCategory.bind(null, id);
 
   return (
     <div className="w-full max-w-5xl px-4 py-8 sm:px-6">

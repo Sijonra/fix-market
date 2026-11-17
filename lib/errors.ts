@@ -11,6 +11,7 @@ export const ERROR_MESSAGES = {
   database_error: 'Не удалось сохранить данные. Попробуйте позже.',
   duplicate_category:
     'Категория с таким названием уже существует в этом разделе.',
+  invalid_name_format: 'Некорректная родительская категория',
 } as const;
 
 export type TErrorCode = keyof typeof ERROR_MESSAGES;

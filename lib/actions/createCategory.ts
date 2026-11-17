@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { redirectToError } from '@/lib/helpers/redirectToError';
-import { UUID_REGEX } from '../helpers/regex';
+import { UUID_REGEX } from '@/lib/helpers/regex';
+import { CATEGORY_NAME_MAX_LENGTH } from '@/lib/constants/categories';
 
 export async function createCategory(formData: FormData) {
   const nameRaw = formData.get('name');
@@ -15,7 +16,7 @@ export async function createCategory(formData: FormData) {
   }
 
   const name = nameRaw.trim();
-  if (name.length === 0 || name.length > 50) {
+  if (name.length === 0 || name.length > CATEGORY_NAME_MAX_LENGTH) {
     redirectToError('/categories/new', 'invalid_name_length');
   }
 

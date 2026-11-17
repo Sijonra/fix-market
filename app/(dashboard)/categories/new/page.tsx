@@ -15,6 +15,7 @@ import {
 import { getParentCategoryOptions } from '@/lib/queries/getParentCategoryOptions';
 import { createCategory } from '@/lib/actions/createCategory';
 import { getErrorMessage } from '@/lib/errors';
+import { CATEGORY_NAME_MAX_LENGTH } from '@/lib/constants/categories';
 
 interface INewCategoryPage {
   searchParams: Promise<{ error?: string }>;
@@ -46,12 +47,14 @@ export default async function NewCategoryPage({
       <h1 className="mb-8 text-3xl font-bold tracking-tight sm:text-4xl">
         Новая категория
       </h1>
+      {errorMessage && (
+        <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
+          {errorMessage}
+        </div>
+      )}
       <div className="rounded-xl border bg-card p-5 sm:p-8">
         <form action={createCategory} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            {errorMessage && (
-              <p className="text-red-500 text-sm">{errorMessage}</p>
-            )}
             <Label htmlFor="name" className="text-base sm:text-lg">
               Название
             </Label>
@@ -60,7 +63,7 @@ export default async function NewCategoryPage({
               name="name"
               placeholder="Например, Смесители"
               className="h-12 text-base sm:text-lg"
-              maxLength={50}
+              maxLength={CATEGORY_NAME_MAX_LENGTH}
               required
             />
           </div>
