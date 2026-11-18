@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
-import { validateCategoryFormData } from './validateCategory';
+import { validateCategoryFormData } from '../validation/validateCategory';
 import { UUID_REGEX } from '@/lib/helpers/regex';
 import { redirectToError } from '@/lib/helpers/redirectToError';
 
@@ -52,7 +52,7 @@ export async function updateCategory(id: string, formData: FormData) {
   }
 
   if (!data) {
-    redirectToError(`/categories/${id}`, 'database_error');
+    redirectToError(`/categories/${id}`, 'category_not_found');
   }
 
   revalidatePath('/categories');

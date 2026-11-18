@@ -2,7 +2,7 @@ import {
   NO_PARENT_VALUE,
   CATEGORY_NAME_MAX_LENGTH,
 } from '@/lib/constants/categories';
-import { TErrorCode } from '@/lib/errors';
+import type { TErrorCode } from '@/lib/errors';
 import { UUID_REGEX } from '@/lib/helpers/regex';
 
 export interface IValidatedCategoryData {

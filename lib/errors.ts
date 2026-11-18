@@ -12,6 +12,8 @@ export const ERROR_MESSAGES = {
   duplicate_category:
     'Категория с таким названием уже существует в этом разделе.',
   invalid_name_format: 'Некорректная родительская категория',
+  category_not_found:
+    'Выбранная категория больше не существует. Пожалуйста, выберите другую и попробуйте снова',
 } as const;
 
 export type TErrorCode = keyof typeof ERROR_MESSAGES;

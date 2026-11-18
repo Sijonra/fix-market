@@ -4,50 +4,37 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { redirectToError } from '@/lib/helpers/redirectToError';
-import { UUID_REGEX } from '@/lib/helpers/regex';
-import { CATEGORY_NAME_MAX_LENGTH } from '@/lib/constants/categories';
+import { validateCategoryFormData } from '../validation/validateCategory';
 
 export async function createCategory(formData: FormData) {
-  const nameRaw = formData.get('name');
-  const parentIdRaw = formData.get('parentId');
-
-  if (typeof nameRaw !== 'string') {
-    redirectToError('/categories/new', 'invalid_form');
+  const validation = validateCategoryFormData(formData);
+  if (!validation.ok) {
+    redirectToError(`/categories/new/`, validation.error);
   }
 
-  const name = nameRaw.trim();
-  if (name.length === 0 || name.length > CATEGORY_NAME_MAX_LENGTH) {
-    redirectToError('/categories/new', 'invalid_name_length');
-  }
-
-  let parentId: string | null = null;
-
-  if (typeof parentIdRaw === 'string' && parentIdRaw !== '') {
-    if (!UUID_REGEX.test(parentIdRaw)) {
-      redirectToError('/categories/new', 'invalid_parent');
-    }
-    parentId = parentIdRaw;
-  }
+  const { name, parent_id } = validation.data;
 
   const supabase = await createClient();
 
   const { error } = await supabase.from('categories').insert({
     name,
-    parent_id: parentId,
+    parent_id: parent_id,
   });
 
   if (error) {
-    console.error('Ошибка создания категории в БД:', error.message);
+    console.error('Ошибка создания категории в БД:', error);
 
     if (error.code === '23505') {
-      redirectToError('/categories/new', 'duplicate_category');
+      redirectToError(`/categories/new/`, 'duplicate_category');
     }
-
     if (error.code === '23503') {
-      redirectToError('/categories/new', 'invalid_parent');
+      redirectToError(`/categories/new/`, 'invalid_parent');
+    }
+    if (error.code === '23514') {
+      redirectToError(`/categories/new/`, 'invalid_name_format');
     }
 
-    redirectToError('/categories/new', 'database_error');
+    redirectToError(`/categories/new/`, 'database_error');
   }
 
   revalidatePath('/categories');
