@@ -7,11 +7,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { getErrorMessage } from '@/lib/errors';
 import { getCategories } from '@/lib/queries/getCategories';
 import Link from 'next/link';
 
-export default async function CategoriesPage() {
+interface ICategoryPage {
+  searchParams: Promise<{ error?: string }>;
+}
+
+export default async function CategoriesPage({ searchParams }: ICategoryPage) {
+  const { error: errorCode } = await searchParams;
   const { data: categories, error: categoriesError } = await getCategories();
+
+  const errorMessage = getErrorMessage(errorCode);
 
   if (categoriesError) {
     return <div>Ошибка при попытке получить категории</div>;
@@ -28,6 +36,16 @@ export default async function CategoriesPage() {
           <TableRow key={category.id}>
             <TableCell>{category.name}</TableCell>
             <TableCell>{category.parent?.name ?? '---'}</TableCell>
+            <TableCell>
+              <Button
+                render={<Link href={`/categories/${category.id}`}></Link>}
+                nativeButton={false}
+                variant="outline"
+                type="button"
+              >
+                Изменить
+              </Button>
+            </TableCell>
           </TableRow>
         );
       })}
@@ -39,6 +57,11 @@ export default async function CategoriesPage() {
       <Button>
         <Link href={'/categories/new'}>Добавить новую категорию</Link>
       </Button>
+      {errorMessage && (
+        <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
+          {errorMessage}
+        </div>
+      )}
       <Table>
         <TableHeader>
           <TableRow>

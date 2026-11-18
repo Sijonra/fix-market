@@ -38,7 +38,7 @@ export default async function NewCategoryPage({
         <CategoryForm
           action={createCategory}
           parentOptions={parents ?? []}
-          submitButtonText="Сохранить изменения"
+          submitButtonText="Добавить категорию"
         />
       </div>
     </div>

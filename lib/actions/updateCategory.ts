@@ -9,7 +9,7 @@ import { redirectToError } from '@/lib/helpers/redirectToError';
 
 export async function updateCategory(id: string, formData: FormData) {
   if (!UUID_REGEX.test(id)) {
-    redirect('/categories');
+    redirectToError('/categories', 'invalid_category_id');
   }
 
   const validation = validateCategoryFormData(formData);
@@ -52,7 +52,7 @@ export async function updateCategory(id: string, formData: FormData) {
   }
 
   if (!data) {
-    redirectToError(`/categories/${id}`, 'category_not_found');
+    redirectToError(`/categories/`, 'category_not_found');
   }
 
   revalidatePath('/categories');

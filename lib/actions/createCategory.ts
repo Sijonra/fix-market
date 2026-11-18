@@ -9,7 +9,7 @@ import { validateCategoryFormData } from '../validation/validateCategory';
 export async function createCategory(formData: FormData) {
   const validation = validateCategoryFormData(formData);
   if (!validation.ok) {
-    redirectToError(`/categories/new/`, validation.error);
+    redirectToError(`/categories/new`, validation.error);
   }
 
   const { name, parent_id } = validation.data;
@@ -25,16 +25,16 @@ export async function createCategory(formData: FormData) {
     console.error('Ошибка создания категории в БД:', error);
 
     if (error.code === '23505') {
-      redirectToError(`/categories/new/`, 'duplicate_category');
+      redirectToError(`/categories/new`, 'duplicate_category');
     }
     if (error.code === '23503') {
-      redirectToError(`/categories/new/`, 'invalid_parent');
+      redirectToError(`/categories/new`, 'invalid_parent');
     }
     if (error.code === '23514') {
-      redirectToError(`/categories/new/`, 'invalid_name_format');
+      redirectToError(`/categories/new`, 'invalid_name_format');
     }
 
-    redirectToError(`/categories/new/`, 'database_error');
+    redirectToError(`/categories/new`, 'database_error');
   }
 
   revalidatePath('/categories');
