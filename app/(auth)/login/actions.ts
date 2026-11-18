@@ -1,5 +1,6 @@
 'use server';
 
+import { redirectToError } from '@/lib/helpers/redirectToError';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
@@ -20,7 +21,7 @@ export async function login(formData: FormData) {
 
   if (error) {
     console.error('Ошибка входа:', error.message);
-    redirect('/login?error=invalid_credentials');
+    redirectToError('/login', 'invalid_credentials');
   }
 
   redirect('/');

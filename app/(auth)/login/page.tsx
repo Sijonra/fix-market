@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { login } from './actions';
-import { getErrorMessage } from './error-messages';
+import { getErrorMessage } from '@/lib/errors';
 
 interface ILoginPage {
   searchParams: Promise<{ error?: string }>;
