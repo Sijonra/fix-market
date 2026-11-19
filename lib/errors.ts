@@ -12,9 +12,14 @@ export const ERROR_MESSAGES = {
   duplicate_category:
     'Категория с таким названием уже существует в этом разделе.',
   invalid_name_format: 'Некорректная родительская категория',
-  invalid_category_id: 'Некорректная ссылка или Категория не найдена.',
+  invalid_category_id: 'Некорректная ссылка или категория не найдена.',
+  invalid_location_id: 'Некорректная ссылка или локация не найдена.',
   category_not_found:
     'Выбранная категория больше не существует. Пожалуйста, выберите другую и попробуйте снова',
+  location_not_found:
+    'Выбранная локация больше не существует. Пожалуйста, выберите другую и попробуйте снова',
+  duplicate_location:
+    'Локация с таким названием уже существует в этом разделе.',
 } as const;
 
 export type TErrorCode = keyof typeof ERROR_MESSAGES;

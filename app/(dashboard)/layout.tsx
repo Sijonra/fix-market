@@ -15,6 +15,7 @@ export default async function Layout({ children }: ILayout) {
       <header>
         <nav>
           <Link href="/categories">Категории</Link>
+          <Link href="/locations">Локации</Link>
         </nav>
         <div>{full_name}</div>
         <div>Роль: {role}</div>
