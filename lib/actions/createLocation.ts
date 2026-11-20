@@ -5,11 +5,12 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { redirectToError } from '@/lib/helpers/redirectToError';
 import { validatedLocationData } from '../validation/validateLocations';
+import { ROUTE_LOCATIONS } from '../constants/routes';
 
 export async function createLocation(formData: FormData) {
   const validation = validatedLocationData(formData);
   if (!validation.ok) {
-    redirectToError(`/locations/new`, validation.error);
+    redirectToError(`${ROUTE_LOCATIONS}/new`, validation.error);
   }
 
   const { name } = validation.data;
@@ -24,15 +25,15 @@ export async function createLocation(formData: FormData) {
     console.error('Ошибка создания локации в БД:', error);
 
     if (error.code === '23505') {
-      redirectToError(`/locations/new`, 'duplicate_location');
+      redirectToError(`${ROUTE_LOCATIONS}/new`, 'duplicate_location');
     }
     if (error.code === '23514') {
-      redirectToError(`/locations/new`, 'invalid_name_format');
+      redirectToError(`${ROUTE_LOCATIONS}/new`, 'invalid_name_format');
     }
 
-    redirectToError(`/locations/new`, 'database_error');
+    redirectToError(`${ROUTE_LOCATIONS}/new`, 'database_error');
   }
 
-  revalidatePath('/locations');
-  redirect('/locations');
+  revalidatePath(ROUTE_LOCATIONS);
+  redirect(ROUTE_LOCATIONS);
 }

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LOCATION_NAME_MAX_LENGTH } from '@/lib/constants/locations';
 
 interface ILocationsForm {
   action: (formData: FormData) => void | Promise<void>;
@@ -26,6 +27,7 @@ export default function LocationsForm({
           defaultValue={defaultName}
           placeholder="Название локации"
           className="h-12 text-base sm:text-lg"
+          maxLength={LOCATION_NAME_MAX_LENGTH}
           required
         />
       </div>

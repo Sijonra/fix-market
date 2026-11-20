@@ -1,6 +1,6 @@
 import { getErrorMessage } from '@/lib/errors';
-import LocationsForm from '../locationsForm';
 import { createLocation } from '@/lib/actions/createLocation';
+import LocationsForm from '@/app/(dashboard)/locations/locationsForm';
 
 interface INewLocationPage {
   searchParams: Promise<{ error?: string }>;

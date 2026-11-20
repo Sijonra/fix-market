@@ -1,1 +1,1 @@
-export const LOCATION_NAME_MAX_LENGTH = 50;
+export const LOCATION_NAME_MAX_LENGTH = 100;

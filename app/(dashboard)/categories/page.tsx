@@ -54,8 +54,11 @@ export default async function CategoriesPage({ searchParams }: ICategoryPage) {
 
   return (
     <div>
-      <Button>
-        <Link href={'/categories/new'}>Добавить новую категорию</Link>
+      <Button
+        render={<Link href={'/categories/new'}></Link>}
+        nativeButton={false}
+      >
+        Добавить новую категорию
       </Button>
       {errorMessage && (
         <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">

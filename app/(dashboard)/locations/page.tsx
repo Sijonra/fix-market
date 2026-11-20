@@ -25,32 +25,38 @@ export default async function LocationsPage({ searchParams }: ILocationsPage) {
     return <div>Ошибка при попытке получить список локаций</div>;
   }
 
-  if (locations === null || locations.length === 0) {
-    return <div>Нет категорий</div>;
-  }
-
-  const locationsRows = locations.map((location) => {
-    return (
-      <TableRow key={location.id}>
-        <TableCell>{location.name}</TableCell>
-        <TableCell>
-          <Button
-            render={<Link href={`/locations/${location.id}`}></Link>}
-            nativeButton={false}
-            variant="outline"
-            type="button"
-          >
-            Изменить
-          </Button>
-        </TableCell>
+  const locationsRows =
+    locations?.length !== 0 && locations !== null ? (
+      locations.map((location) => {
+        return (
+          <TableRow key={location.id}>
+            <TableCell>{location.name}</TableCell>
+            <TableCell>
+              <Button
+                render={<Link href={`/locations/${location.id}`}></Link>}
+                nativeButton={false}
+                variant="outline"
+                type="button"
+              >
+                Изменить
+              </Button>
+            </TableCell>
+          </TableRow>
+        );
+      })
+    ) : (
+      <TableRow>
+        <TableCell>Нет локаций</TableCell>
       </TableRow>
     );
-  });
 
   return (
     <div>
-      <Button>
-        <Link href={'/locations/new'}>Добавить новую локацию</Link>
+      <Button
+        render={<Link href={'/locations/new'}></Link>}
+        nativeButton={false}
+      >
+        Добавить новую локацию
       </Button>
       {errorMessage && (
         <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
@@ -61,7 +67,7 @@ export default async function LocationsPage({ searchParams }: ILocationsPage) {
         <TableHeader>
           <TableRow>
             <TableHead>Название</TableHead>
-            <TableHead>Родитель</TableHead>
+            <TableHead>Действия</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>{locationsRows}</TableBody>

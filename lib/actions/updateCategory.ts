@@ -6,21 +6,22 @@ import { createClient } from '@/lib/supabase/server';
 import { validateCategoryFormData } from '../validation/validateCategory';
 import { UUID_REGEX } from '@/lib/helpers/regex';
 import { redirectToError } from '@/lib/helpers/redirectToError';
+import { ROUTE_CATEGORIES } from '../constants/routes';
 
 export async function updateCategory(id: string, formData: FormData) {
   if (!UUID_REGEX.test(id)) {
-    redirectToError('/categories', 'invalid_category_id');
+    redirectToError(ROUTE_CATEGORIES, 'invalid_category_id');
   }
 
   const validation = validateCategoryFormData(formData);
   if (!validation.ok) {
-    redirectToError(`/categories/${id}`, validation.error);
+    redirectToError(`${ROUTE_CATEGORIES}/${id}`, validation.error);
   }
 
   const { name, parent_id } = validation.data;
 
   if (parent_id === id) {
-    redirectToError(`/categories/${id}`, 'invalid_parent');
+    redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'invalid_parent');
   }
 
   const supabase = await createClient();
@@ -39,22 +40,22 @@ export async function updateCategory(id: string, formData: FormData) {
     console.error('Ошибка обновления категории в БД:', error);
 
     if (error.code === '23505') {
-      redirectToError(`/categories/${id}`, 'duplicate_category');
+      redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'duplicate_category');
     }
     if (error.code === '23503') {
-      redirectToError(`/categories/${id}`, 'invalid_parent');
+      redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'invalid_parent');
     }
     if (error.code === '23514') {
-      redirectToError(`/categories/${id}`, 'invalid_name_format');
+      redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'invalid_name_format');
     }
 
-    redirectToError(`/categories/${id}`, 'database_error');
+    redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'database_error');
   }
 
   if (!data) {
-    redirectToError(`/categories/`, 'category_not_found');
+    redirectToError(`${ROUTE_CATEGORIES}/`, 'category_not_found');
   }
 
-  revalidatePath('/categories');
-  redirect('/categories');
+  revalidatePath(ROUTE_CATEGORIES);
+  redirect(ROUTE_CATEGORIES);
 }
