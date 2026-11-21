@@ -1,3 +1,5 @@
+import { ErrorBanner } from '@/components/shared/ErrorBanner';
+import ErrorFallback from '@/components/shared/ErrorFallback';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -22,7 +24,9 @@ export default async function CategoriesPage({ searchParams }: ICategoryPage) {
   const errorMessage = getErrorMessage(errorCode);
 
   if (categoriesError) {
-    return <div>Ошибка при попытке получить категории</div>;
+    return (
+      <ErrorFallback errorMessage="Ошибка при попытке получить категории" />
+    );
   }
 
   if (categories === null || categories.length === 0) {
@@ -54,14 +58,13 @@ export default async function CategoriesPage({ searchParams }: ICategoryPage) {
 
   return (
     <div>
-      <Button>
-        <Link href={'/categories/new'}>Добавить новую категорию</Link>
+      <Button
+        render={<Link href={'/categories/new'}></Link>}
+        nativeButton={false}
+      >
+        Добавить новую категорию
       </Button>
-      {errorMessage && (
-        <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
-          {errorMessage}
-        </div>
-      )}
+      <ErrorBanner message={errorMessage} />
       <Table>
         <TableHeader>
           <TableRow>
