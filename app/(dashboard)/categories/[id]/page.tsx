@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import { getErrorMessage } from '@/lib/errors';
 import CategoryForm from '@/app/(dashboard)/categories/CategoryForm';
 import { updateCategory } from '@/lib/actions/updateCategory';
+import { ErrorBanner } from '@/components/shared/ErrorBanner';
+import ErrorFallback from '@/components/shared/ErrorFallback';
 
 interface IEditCategoriesPage {
   params: Promise<{ id: string }>;
@@ -32,9 +34,7 @@ export default async function EditCategoryPage({
 
   if (categoryError || parentsError) {
     return (
-      <div className="p-8 text-destructive">
-        Ошибка при загрузке данных категории.
-      </div>
+      <ErrorFallback errorMessage="Ошибка при загрузке данных категории" />
     );
   }
 
@@ -52,12 +52,7 @@ export default async function EditCategoryPage({
         Редактирование категории
       </h1>
 
-      {errorMessage && (
-        <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
-          {errorMessage}
-        </div>
-      )}
-
+      <ErrorBanner message={errorMessage} />
       <div className="rounded-xl border bg-card p-5 sm:p-8">
         <CategoryForm
           action={updateCategoryWithId}

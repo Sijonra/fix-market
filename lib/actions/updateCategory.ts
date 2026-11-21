@@ -3,25 +3,27 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
-import { validateCategoryFormData } from '../validation/validateCategory';
+import { validateCategoryFormData } from '@/lib/validation/validateCategory';
 import { UUID_REGEX } from '@/lib/helpers/regex';
 import { redirectToError } from '@/lib/helpers/redirectToError';
-import { ROUTE_CATEGORIES } from '../constants/routes';
+import { categoryEditRoute, ROUTE_CATEGORIES } from '@/lib/constants/routes';
 
 export async function updateCategory(id: string, formData: FormData) {
   if (!UUID_REGEX.test(id)) {
     redirectToError(ROUTE_CATEGORIES, 'invalid_category_id');
   }
 
+  const editPath = categoryEditRoute(id);
+
   const validation = validateCategoryFormData(formData);
   if (!validation.ok) {
-    redirectToError(`${ROUTE_CATEGORIES}/${id}`, validation.error);
+    redirectToError(editPath, validation.error);
   }
 
   const { name, parent_id } = validation.data;
 
   if (parent_id === id) {
-    redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'invalid_parent');
+    redirectToError(editPath, 'invalid_parent');
   }
 
   const supabase = await createClient();
@@ -40,20 +42,20 @@ export async function updateCategory(id: string, formData: FormData) {
     console.error('Ошибка обновления категории в БД:', error);
 
     if (error.code === '23505') {
-      redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'duplicate_category');
+      redirectToError(editPath, 'duplicate_category');
     }
     if (error.code === '23503') {
-      redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'invalid_parent');
+      redirectToError(editPath, 'invalid_parent');
     }
     if (error.code === '23514') {
-      redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'invalid_name_format');
+      redirectToError(editPath, 'invalid_name_format');
     }
 
-    redirectToError(`${ROUTE_CATEGORIES}/${id}`, 'database_error');
+    redirectToError(editPath, 'database_error');
   }
 
   if (!data) {
-    redirectToError(`${ROUTE_CATEGORIES}/`, 'category_not_found');
+    redirectToError(ROUTE_CATEGORIES, 'category_not_found');
   }
 
   revalidatePath(ROUTE_CATEGORIES);

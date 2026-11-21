@@ -6,16 +6,18 @@ import { createClient } from '@/lib/supabase/server';
 import { UUID_REGEX } from '@/lib/helpers/regex';
 import { redirectToError } from '@/lib/helpers/redirectToError';
 import { validatedLocationData } from '@/lib/validation/validateLocations';
-import { ROUTE_LOCATIONS } from '../constants/routes';
+import { categoryEditRoute, ROUTE_LOCATIONS } from '@/lib/constants/routes';
 
 export async function updateLocation(id: string, formData: FormData) {
   if (!UUID_REGEX.test(id)) {
     redirectToError(ROUTE_LOCATIONS, 'invalid_location_id');
   }
 
+  const editPath = categoryEditRoute(id);
+
   const validation = validatedLocationData(formData);
   if (!validation.ok) {
-    redirectToError(`${ROUTE_LOCATIONS}/${id}`, validation.error);
+    redirectToError(editPath, validation.error);
   }
 
   const { name } = validation.data;
@@ -35,14 +37,14 @@ export async function updateLocation(id: string, formData: FormData) {
     console.error('Ошибка обновления локации в БД:', error);
 
     if (error.code === '23505') {
-      redirectToError(`${ROUTE_LOCATIONS}/${id}`, 'duplicate_location');
+      redirectToError(editPath, 'duplicate_location');
     }
 
     if (error.code === '23514') {
-      redirectToError(`${ROUTE_LOCATIONS}/${id}`, 'invalid_name_format');
+      redirectToError(editPath, 'invalid_name_format');
     }
 
-    redirectToError(`${ROUTE_LOCATIONS}/${id}`, 'database_error');
+    redirectToError(editPath, 'database_error');
   }
 
   if (!data) {

@@ -1,3 +1,5 @@
+import { ErrorBanner } from '@/components/shared/ErrorBanner';
+import ErrorFallback from '@/components/shared/ErrorFallback';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -22,7 +24,9 @@ export default async function LocationsPage({ searchParams }: ILocationsPage) {
   const errorMessage = getErrorMessage(errorCode);
 
   if (locationsError) {
-    return <div>Ошибка при попытке получить список локаций</div>;
+    return (
+      <ErrorFallback errorMessage="Ошибка при попытке получить список локаций" />
+    );
   }
 
   const locationsRows =
@@ -37,6 +41,7 @@ export default async function LocationsPage({ searchParams }: ILocationsPage) {
                 nativeButton={false}
                 variant="outline"
                 type="button"
+                aria-label={`Изменить локацию ${location.name}`}
               >
                 Изменить
               </Button>
@@ -46,7 +51,9 @@ export default async function LocationsPage({ searchParams }: ILocationsPage) {
       })
     ) : (
       <TableRow>
-        <TableCell>Нет локаций</TableCell>
+        <TableCell colSpan={2} className="h-24 text-center">
+          Нет локаций
+        </TableCell>
       </TableRow>
     );
 
@@ -58,11 +65,7 @@ export default async function LocationsPage({ searchParams }: ILocationsPage) {
       >
         Добавить новую локацию
       </Button>
-      {errorMessage && (
-        <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
-          {errorMessage}
-        </div>
-      )}
+      <ErrorBanner message={errorMessage} />
       <Table>
         <TableHeader>
           <TableRow>

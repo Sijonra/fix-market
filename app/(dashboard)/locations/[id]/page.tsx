@@ -4,6 +4,8 @@ import { getErrorMessage } from '@/lib/errors';
 import { getLocationById } from '@/lib/queries/getLocationById';
 import LocationsForm from '@/app/(dashboard)/locations/locationsForm';
 import { updateLocation } from '@/lib/actions/updateLocation';
+import ErrorFallback from '@/components/shared/ErrorFallback';
+import { ErrorBanner } from '@/components/shared/ErrorBanner';
 
 interface IEditLocationPage {
   params: Promise<{ id: string }>;
@@ -24,11 +26,7 @@ export default async function EditLocationPage({
   const { data: location, error: locationError } = await getLocationById(id);
 
   if (locationError) {
-    return (
-      <div className="p-8 text-destructive">
-        Ошибка при загрузке данных локации.
-      </div>
-    );
+    return <ErrorFallback errorMessage="Ошибка при загрузке данных локации" />;
   }
 
   if (!location) {
@@ -45,11 +43,7 @@ export default async function EditLocationPage({
         Редактирование локации
       </h1>
 
-      {errorMessage && (
-        <div className="mb-6 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium">
-          {errorMessage}
-        </div>
-      )}
+      <ErrorBanner message={errorMessage} />
 
       <div className="rounded-xl border bg-card p-5 sm:p-8">
         <LocationsForm
