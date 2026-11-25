@@ -2,7 +2,11 @@ import { Button } from '@/components/ui/button';
 import { getCurrentProfileData } from '@/lib/queries/getCurrentProfileData';
 import { logout } from '@/lib/actions/logout';
 import Link from 'next/link';
-import { ROUTE_CATEGORIES, ROUTE_LOCATIONS } from '@/lib/constants/routes';
+import {
+  ROUTE_BRANDS,
+  ROUTE_CATEGORIES,
+  ROUTE_LOCATIONS,
+} from '@/lib/constants/routes';
 
 interface ILayout {
   children: React.ReactNode;
@@ -17,6 +21,7 @@ export default async function Layout({ children }: ILayout) {
         <nav>
           <Link href={ROUTE_CATEGORIES}>Категории</Link>
           <Link href={ROUTE_LOCATIONS}>Локации</Link>
+          <Link href={ROUTE_BRANDS}>Бренды</Link>
         </nav>
         <div>{full_name}</div>
         <div>Роль: {role}</div>
