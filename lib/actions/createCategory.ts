@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { redirectToError } from '@/lib/helpers/redirectToError';
 import { validateCategoryFormData } from '../validation/validateCategory';
-import { ROUTE_CATEGORIES } from '../constants/routes';
+import { ROUTE_CATEGORIES } from '@/lib/constants/routes';
 
 export async function createCategory(formData: FormData) {
   const validation = validateCategoryFormData(formData);
